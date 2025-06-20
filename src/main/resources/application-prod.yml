@@ -1,1 +1,11 @@
-
+spring:
+  application:
+    name: control-academico
+  datasource:
+    url: jdbc:postgresql://localhost:5432/control_academico
+    username: admin
+    password: 12345
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
