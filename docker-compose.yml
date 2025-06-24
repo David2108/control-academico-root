@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+
+  # DB - dev
+  mysql-dev:
+    image: mysql:8.0
+    container_name: mysql-dev
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: control_academico
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: dev
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+
+  # DB - prod
+  postgres-prod:
+    image: postgres:15
+    container_name: postgres-prod
+    environment:
+      POSTGRES_DB: control_academico
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  # DB - quality
+  db2-quality:
+    image: ibmcom/db2:11.5.8.0
+    container_name: db2-quality
+    privileged: true
+    environment:
+      LICENSE: accept
+      DBNAME: control
+      DB2INSTANCE: dev
+      DB2INST1_PASSWORD: dev
+      ARCHIVE_LOGS: false
+    ports:
+      - "50000:50000"
+    volumes:
+      - db2data:/data
+    command: >
+      bash -c "
+        mkdir -p /data/config && 
+        ln -s /data /database &&
+        /var/db2_setup/lib/setup_db2_instance.sh"
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+  pgdata:
+  db2data:
