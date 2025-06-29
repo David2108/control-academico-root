@@ -1,11 +1,18 @@
 plugins {
-    id("org.springframework.boot")
+    id("java")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.boot:spring-boot-dependencies:3.2.0")
+    }
 }
 
 dependencies {
     implementation(project(":shared")) // si usas shared
 
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
     // Validations
     implementation("jakarta.validation:jakarta.validation-api:3.0.2")

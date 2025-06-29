@@ -1,7 +1,10 @@
 plugins {
     id("org.springframework.boot")
+    id("io.spring.dependency-management")
+    id("java")
 }
 dependencies {
+
     implementation(project(":academic-core"))
     implementation(project(":attendance"))
     implementation(project(":student"))
@@ -10,6 +13,8 @@ dependencies {
     implementation(project(":shared"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     // Database
     runtimeOnly("mysql:mysql-connector-java:8.0.33")
@@ -26,4 +31,9 @@ dependencies {
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
+}
+
+// Indica cual es la clase main, para que bootJar la ejecute
+springBoot {
+    mainClass = "com.web.app.controlacademico.app.ControlAcademicoApplication"
 }

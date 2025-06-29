@@ -7,8 +7,8 @@ val lombokVersion = "1.18.30"
 val mapstructVersion = "1.5.5.Final"
 
 plugins {
-    id("io.spring.dependency-management") version "1.1.7" apply false
     id("org.springframework.boot") version "3.5.0" apply false
+    id("io.spring.dependency-management") version "1.1.7" apply false
     kotlin("jvm") version "1.9.0" apply false
 }
 
@@ -19,9 +19,16 @@ allprojects {
     repositories {
         mavenCentral()
     }
+
+    // Configurar para que todos los modulos puedan usar junit5
+    tasks.withType<Test> {
+        useJUnitPlatform()
+    }
 }
 
 subprojects {
+
+    //Declara la version
     apply(plugin = "java")
     apply(plugin = "io.spring.dependency-management")
 
@@ -46,8 +53,6 @@ subprojects {
 
     dependencies {
 
-        "implementation"("org.springframework.boot:spring-boot-starter-data-jpa")
-
         // Lombok
         "compileOnly"("org.projectlombok:lombok:$lombokVersion")
         "annotationProcessor"("org.projectlombok:lombok:$lombokVersion")
@@ -56,12 +61,11 @@ subprojects {
         "implementation"("org.mapstruct:mapstruct:$mapstructVersion")
         "annotationProcessor"("org.mapstruct:mapstruct-processor:$mapstructVersion")
 
-        "annotationProcessor"("org.springframework.boot:spring-boot-configuration-processor")
-    }
-
-    // Configurar tests
-    tasks.withType<Test> {
-        useJUnitPlatform()
+        // QueryDSL
+        "implementation"("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+        "annotationProcessor"("com.querydsl:querydsl-apt:5.0.0:jakarta")
+        "annotationProcessor"("jakarta.annotation:jakarta.annotation-api")
+        "annotationProcessor"("jakarta.persistence:jakarta.persistence-api")
     }
 
     // Incluir carpeta de código generado para MapStruct y QueryDSL
