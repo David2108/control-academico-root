@@ -13,7 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest(classes = ControlAcademicoApplication.class)
+@SpringBootTest(classes = com.web.app.controlacademico.app.ControlAcademicoApplication.class)
 @ActiveProfiles("test")
 @Transactional
 public class CourseServiceIT {

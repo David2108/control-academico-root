@@ -1,7 +1,6 @@
 package com.web.app.controlacademico.academic.core.controller;
 
 import com.web.app.controlacademico.academic.core.repository.ICourseRepository;
-import com.web.app.controlacademico.app.ControlAcademicoApplication;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(classes = ControlAcademicoApplication.class)
+@SpringBootTest(classes = com.web.app.controlacademico.app.ControlAcademicoApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Transactional
