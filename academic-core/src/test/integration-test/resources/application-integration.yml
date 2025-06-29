@@ -12,5 +12,4 @@ spring:
       enabled: true
 
   liquibase:
-    contexts: test
     enabled: false

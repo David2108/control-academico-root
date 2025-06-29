@@ -5,7 +5,6 @@ on:
     branches:
       - master
       - develop
-      - feat/module-restructure
   pull_request:
     branches:
       - master
