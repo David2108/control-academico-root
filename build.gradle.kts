@@ -3,9 +3,8 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.*
 
-val mapstructVersion = "1.5.5.Final"
-val querydslVersion = "5.0.0"
 val lombokVersion = "1.18.30"
+val mapstructVersion = "1.5.5.Final"
 
 plugins {
     id("io.spring.dependency-management") version "1.1.7" apply false
@@ -47,11 +46,16 @@ subprojects {
 
     dependencies {
 
-        //Lombok
+        "implementation"("org.springframework.boot:spring-boot-starter-data-jpa")
+
+        // Lombok
         "compileOnly"("org.projectlombok:lombok:$lombokVersion")
         "annotationProcessor"("org.projectlombok:lombok:$lombokVersion")
 
-        "testImplementation"("org.springframework.boot:spring-boot-starter-test")
+        // Mapper
+        "implementation"("org.mapstruct:mapstruct:$mapstructVersion")
+        "annotationProcessor"("org.mapstruct:mapstruct-processor:$mapstructVersion")
+
         "annotationProcessor"("org.springframework.boot:spring-boot-configuration-processor")
     }
 

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="schedule-table-mysql" author="david" dbms="mysql">
+        <createTable tableName="course_classroom_schedule">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="weekday" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_time" type="${datetime_type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_time" type="${datetime_type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="course_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="classroom_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="course_classroom_schedule"
+                                 baseColumnNames="course_id"
+                                 constraintName="fk_schedule_course"
+                                 referencedTableName="courses"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="course_classroom_schedule"
+                                 baseColumnNames="classroom_id"
+                                 constraintName="fk_schedule_classroom"
+                                 referencedTableName="classrooms"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

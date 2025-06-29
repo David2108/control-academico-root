@@ -6,7 +6,11 @@ spring:
     password:
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
   h2:
     console:
       enabled: true
+
+  liquibase:
+    contexts: test
+    enabled: false
