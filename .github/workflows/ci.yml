@@ -55,7 +55,7 @@ jobs:
         run: ./gradlew :app:integrationTest
 
       - name: Reporte de cobertura (Jacoco)
-        run: ./gradlew jacocoTestReport
+        run: ./gradlew :academic-core:jacocoTestReport :app:jacocoTestReport
 
       - name: Publicar artefacto (opcional)
         if: success()

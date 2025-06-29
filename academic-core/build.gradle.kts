@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("jacoco")
 }
 
 dependencyManagement {
@@ -39,4 +40,19 @@ tasks.test {
 
 tasks.getByName<Jar>("jar") {
     enabled = true
+}
+
+// Configuración global de Jacoco para el módulo
+jacoco {
+    toolVersion = "0.8.11" // o la última versión estable
+}
+
+// Configura el reporte del task jacocoTestReport
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // Que siempre corra después de los tests
+    reports {
+        xml.required.set(true)  // ¡IMPORTANTE! Así Codecov/Sonar puede analizarlo
+        html.required.set(false)
+        csv.required.set(false)
+    }
 }

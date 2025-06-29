@@ -2,6 +2,7 @@ plugins {
     id("org.springframework.boot")
     id("io.spring.dependency-management")
     id("java")
+    id("jacoco")
 }
 dependencies {
 
@@ -59,4 +60,19 @@ tasks.register<Test>("integrationTest") {
 
 tasks.named("check") {
     dependsOn("integrationTest")
+}
+
+// Configuración global de Jacoco para el módulo
+jacoco {
+    toolVersion = "0.8.11" // o la última versión estable
+}
+
+// Configura el reporte del task jacocoTestReport
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // Que siempre corra después de los tests
+    reports {
+        xml.required.set(true)  // ¡IMPORTANTE! Así Codecov/Sonar puede analizarlo
+        html.required.set(false)
+        csv.required.set(false)
+    }
 }
