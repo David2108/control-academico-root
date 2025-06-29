@@ -52,7 +52,7 @@ jobs:
         run: ./gradlew clean build test --stacktrace
 
       - name: Pruebas de integracion
-        run: ./gradlew integrationTest --stacktrace
+        run: ./gradlew :app:integrationTest
 
       - name: Reporte de cobertura (Jacoco)
         run: ./gradlew jacocoTestReport
