@@ -45,6 +45,9 @@ jobs:
             ~/.gradle/wrapper
           key: gradle-${{ runner.os }}-${{hashFiles('**/*.gradle*', '**/gradle-wrapper.properties')}}
 
+      - name: Da permisos a gradlew
+        run: chmod +x ./gradlew
+
       - name: Build y pruebas unitarias
         run: ./gradlew clean build test --stacktrace
 
