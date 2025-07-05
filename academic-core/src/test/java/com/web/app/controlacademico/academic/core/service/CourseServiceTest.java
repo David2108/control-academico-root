@@ -20,8 +20,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CourseServiceTest {
@@ -38,8 +37,16 @@ public class CourseServiceTest {
     @Test
     void shouldGetListWithDataWhenGetListAllCoursesAndExistData(){
         List<CourseEntity> listEntity = List.of(
-                new CourseEntity(1L, "C1", "Curso 1", null),
-                new CourseEntity(2L, "C2", "Curso 2", null)
+                CourseEntity.builder()
+                        .id(1L)
+                        .code("C1")
+                        .name("Curso 1")
+                        .build(),
+                CourseEntity.builder()
+                        .id(2L)
+                        .code("C2")
+                        .name("Curso 2")
+                        .build()
         );
         when(courseRepository.findAll()).thenReturn(listEntity);
         when(courseMapper.toDtoResponse(any(CourseEntity.class)))
@@ -101,7 +108,7 @@ public class CourseServiceTest {
     void shouldThrownInvalidExceptionWhenGetCourseByIdIfIdIsInvalid(){
         Long id = 0L;
 
-        assertThrows(InvalidIdException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             courseService.getById(id);
         });
     }
@@ -133,12 +140,11 @@ public class CourseServiceTest {
                 .thenReturn(entityConvert);
         when(courseRepository.save(entityConvert))
                 .thenReturn(newEntityDB);
-        when(courseMapper.toDtoResponse(newEntityDB))
-                .thenReturn(response);
 
-        CourseResumeResponse courseResponse = courseService.save(request);
+        CourseEntity courseResponse = courseService.save(request);
         assertNotNull(courseResponse);
-        assertEquals(response, courseResponse);
+        assertEquals(response.getCode(), courseResponse.getCode());
+        verify(courseRepository, times(1)).save(entityConvert);
 
     }
 

@@ -1,8 +1,11 @@
 package com.web.app.controlacademico.academic.core.controller;
 
-import com.web.app.controlacademico.academic.core.entity.CourseEntity;
+import com.web.app.controlacademico.academic.core.entity.SubjectEntity;
+import com.web.app.controlacademico.academic.core.entity.SubjectEntity;
 import com.web.app.controlacademico.academic.core.enums.StatusCourseEnum;
+import com.web.app.controlacademico.academic.core.mapper.ISubjectMapper;
 import com.web.app.controlacademico.academic.core.repository.ICourseRepository;
+import com.web.app.controlacademico.academic.core.repository.ISubjectRepository;
 import com.web.app.controlacademico.app.ControlAcademicoApplication;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +21,6 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,10 +29,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Transactional
-public class CourseControllerIT {
+public class SubjectControllerIT {
 
     @Autowired
-    private ICourseRepository repository;
+    private ISubjectRepository repository;
+    @Autowired
+    private ISubjectMapper mapper;
 
     @Autowired
     private MockMvc mockMvc;
@@ -43,17 +47,15 @@ public class CourseControllerIT {
     @Test
     void shouldGetAllCoursesWithData() throws Exception {
 
-        CourseEntity entity = CourseEntity.builder()
+        SubjectEntity entity = SubjectEntity.builder()
                 .code("BIO101")
                 .name("Aula 101")
-                .status(StatusCourseEnum.ACTIVE)
-                .classroomLst(new ArrayList<>())
-                .subjectLst(new ArrayList<>())
+                .credits(5)
                 .build();
 
         repository.save(entity);
 
-        mockMvc.perform(get("/api/courses")
+        mockMvc.perform(get("/api/subjects")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -64,7 +66,7 @@ public class CourseControllerIT {
     @Test
     void shouldGetEmptyListCourses() throws Exception {
 
-        mockMvc.perform(get("/api/courses")
+        mockMvc.perform(get("/api/subjects")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
@@ -78,11 +80,12 @@ public class CourseControllerIT {
         String request = """
                 {
                     "code":"BIO101",
-                    "name":"Aula 101"
+                    "name":"Aula 101",
+                    "credits":5
                 }
                 """;
 
-        mockMvc.perform(post("/api/courses")
+        mockMvc.perform(post("/api/subjects")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(request))
                 .andExpect(status().isCreated())
@@ -99,7 +102,7 @@ public class CourseControllerIT {
                 }
                 """;
 
-        mockMvc.perform(post("/api/courses")
+        mockMvc.perform(post("/api/subjects")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(request))
                 .andExpect(status().isBadRequest());
@@ -115,7 +118,7 @@ public class CourseControllerIT {
                 }
                 """;
 
-        mockMvc.perform(post("/api/courses")
+        mockMvc.perform(post("/api/subjects")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(request))
                 .andExpect(status().isBadRequest());
@@ -124,15 +127,15 @@ public class CourseControllerIT {
     @Test
     void shouldGetCourseById() throws Exception {
 
-        CourseEntity entity = CourseEntity.builder()
+        SubjectEntity entity = SubjectEntity.builder()
                 .code("BIO101")
                 .name("Aula 101")
-                .status(StatusCourseEnum.ACTIVE)
+                .credits(5)
                 .build();
 
-        CourseEntity response = repository.save(entity);
+        SubjectEntity response = repository.save(entity);
 
-        mockMvc.perform(get("/api/courses/{id}", response.getId())
+        mockMvc.perform(get("/api/subjects/{id}", response.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("BIO101"));
@@ -146,42 +149,38 @@ public class CourseControllerIT {
                 {
                     "code":"BIO101",
                     "name":"Aula 101",
-                    "period":"2025-2026",
-                    "status":"ACTIVE",
-                    "seats":5
+                    "credits":5
                 }
                 """;
 
-        CourseEntity entity = CourseEntity.builder()
+        SubjectEntity entity = SubjectEntity.builder()
                 .code("BIO101")
                 .name("Aula 101")
-                .status(StatusCourseEnum.ACTIVE)
+                .credits(10)
                 .build();
 
-        CourseEntity response = repository.save(entity);
+        SubjectEntity response = repository.save(entity);
 
-        mockMvc.perform(put("/api/courses/{id}", response.getId())
+        mockMvc.perform(put("/api/subjects/{id}", response.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(request))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.period").value("2025-2026"));
+                .andExpect(jsonPath("$.credits").value("5"));
 
     }
 
     @Test
     void shouldDeleteCourseById() throws Exception {
 
-        CourseEntity entity = CourseEntity.builder()
+        SubjectEntity entity = SubjectEntity.builder()
                 .code("BIO101")
                 .name("Aula 101")
-                .status(StatusCourseEnum.ACTIVE)
-                .classroomLst(new ArrayList<>())
-                .subjectLst(new ArrayList<>())
+                .credits(5)
                 .build();
 
-        CourseEntity response = repository.save(entity);
+        SubjectEntity response = repository.save(entity);
 
-        mockMvc.perform(delete("/api/courses/{id}", response.getId())
+        mockMvc.perform(delete("/api/subjects/{id}", response.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 

@@ -16,7 +16,11 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
     // Validations
-    implementation("jakarta.validation:jakarta.validation-api:3.0.2")
+    //implementation("jakarta.validation:jakarta.validation-api:3.0.2")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+
+    // Utility
+    implementation("org.apache.commons:commons-collections4:4.4")
 
     // Database
     runtimeOnly("org.postgresql:postgresql")
@@ -31,6 +35,9 @@ dependencies {
     // Test integration
     testImplementation(project(":app"))
     testImplementation("com.h2database:h2")
+    // Data Testing
+    testImplementation("org.jeasy:easy-random-core:5.0.0")
+    testImplementation("net.datafaker:datafaker:2.0.2")
 
 }
 

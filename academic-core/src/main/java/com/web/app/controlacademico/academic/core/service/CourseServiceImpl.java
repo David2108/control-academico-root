@@ -2,16 +2,22 @@ package com.web.app.controlacademico.academic.core.service;
 
 import com.web.app.controlacademico.academic.core.dto.CourseRequest;
 import com.web.app.controlacademico.academic.core.dto.CourseResumeResponse;
+import com.web.app.controlacademico.academic.core.dto.CourseUpdateRequest;
 import com.web.app.controlacademico.academic.core.entity.CourseEntity;
+import com.web.app.controlacademico.academic.core.enums.StatusCourseEnum;
 import com.web.app.controlacademico.academic.core.exception.CourseExistsException;
 import com.web.app.controlacademico.academic.core.mapper.ICourseMapper;
 import com.web.app.controlacademico.academic.core.repository.ICourseRepository;
 import com.web.app.controlacademico.shared.exception.InvalidIdException;
 import com.web.app.controlacademico.shared.exception.InvalidMappingException;
 import com.web.app.controlacademico.shared.exception.NotFoundException;
-import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.Objects;
@@ -33,62 +39,52 @@ public class CourseServiceImpl implements ICourseService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    @Validated
     @Override
-    public CourseResumeResponse getById(Long id) {
-        if(Objects.isNull(id) ||  id.compareTo(0L) <= 0){
-            throw new InvalidIdException();
-        }
+    public CourseEntity getById(@NotNull @Positive Long id) {
         return this.courseRepository.findById(id)
-                .map(courseMapper::toDtoResponse)
                 .orElseThrow(() -> new NotFoundException("No se encontro el curso con el id:" + id + " en la base de datos al momento de consultarlo"));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
+    @Validated
     @Override
-    public CourseResumeResponse save(CourseRequest dto) {
-        try{
-            if(courseRepository.existsByCode(dto.getCode())){
-                throw new CourseExistsException("Ya existe un curso con ese codigo: " + dto.getCode());
+    public CourseEntity save(@Valid CourseRequest dto) {
+        try {
+            if (courseRepository.existsByCode(dto.getCode())) {
+                throw new CourseExistsException("Ya existe un curso con el codigo:" + dto.getCode() + " en la base de datos");
             }
-            //todo falta la validacion cuando se quiere crear el curso y asignar a una aula o grupo de aulas
             CourseEntity entity = courseMapper.toEntity(dto);
-            CourseEntity responseEntity = courseRepository.save(entity);
-            return courseMapper.toDtoResponse(responseEntity);
-        } catch (IllegalArgumentException ex){
+            entity.setStatus(StatusCourseEnum.ACTIVE);
+            return courseRepository.save(entity);
+        } catch (IllegalArgumentException ex) {
             throw new InvalidMappingException("No se pudo mapear el objeto");
         }
     }
 
+    @Transactional
+    @Validated
     @Override
-    public CourseResumeResponse update(CourseRequest dto, Long id) {
-        try{
-            if(Objects.isNull(id) || id.compareTo(0L) <= 0){
-                throw new InvalidIdException();
-            }
-            Optional<CourseEntity> courseDB = courseRepository.findById(id);
-            if(courseDB.isEmpty()){
-                throw new NotFoundException("No se encontro el curso con el id:" + id + " en la base de datos al momento de actualizar el curso");
-            }else{
-                courseDB.get().setName(dto.getName());
-                //todo verificar horarios y actualizar si existen
-               CourseEntity responseEntity = courseRepository.save(courseDB.get());
-               return courseMapper.toDtoResponse(responseEntity);
-            }
-        }catch (IllegalArgumentException ex){
-            throw new InvalidMappingException("No se pudo mapear el objeto");
+    public CourseEntity update(@Valid CourseUpdateRequest dto,
+                               @NotNull @Positive Long id) {
+        Optional<CourseEntity> courseDB = courseRepository.findById(id);
+        if (courseDB.isEmpty()) {
+            throw new NotFoundException("No se encontro el curso con el id:" + id + " en la base de datos al momento de actualizar el curso");
+        } else {
+            courseDB.get().setName(dto.getName());
+            courseDB.get().setPeriod(dto.getPeriod());
+            courseDB.get().setStatus(dto.getStatus());
+            courseDB.get().setSeats(dto.getSeats());
+            return courseRepository.save(courseDB.get());
         }
     }
 
+    @Transactional
+    @Validated
     @Override
-    public void deleteById(Long id) {
-        if(Objects.isNull(id) || id.compareTo(0L) <= 0){
-            throw new InvalidIdException();
-        }
-        if(courseRepository.existsById(id)){
-            this.courseRepository.deleteById(id);
-        }else{
-            throw new NotFoundException("No se encontro el curso con el id:" + id + " en la base de datos al momento de eliminar el curso");
-        }
+    public void deleteById(@NotNull @Positive Long id) {
+        this.courseRepository.deleteById(id);
     }
 
 }

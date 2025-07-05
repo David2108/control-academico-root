@@ -1,11 +1,9 @@
 package com.web.app.controlacademico.academic.core.entity;
 
-import com.web.app.controlacademico.academic.core.enums.StatusCourseEnum;
 import com.web.app.controlacademico.shared.core.Auditable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -20,38 +18,37 @@ import java.util.Objects;
 @Builder
 @ToString
 @Entity
-@Table(name = "courses")
-public class CourseEntity extends Auditable {
-
+@Table(name = "subject")
+public class SubjectEntity extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 10)
+    @NotEmpty
+    @Column(unique = true, nullable = false)
     private String code;
 
-    @Column(nullable = false, length = 100)
+    @NotEmpty
+    @Column(nullable = false)
     private String name;
 
-    private String period;
-
+    @Min(value = 1)
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private StatusCourseEnum status;
+    private Integer credits;
 
-    private Integer seats;
-
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @Builder.Default
-    @OneToMany(mappedBy = "course", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
-    List<CourseClassroomScheduleEntity> classroomLst = new ArrayList<>();
+    private String description;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @Builder.Default
-    @OneToMany(mappedBy = "course", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
-    List<CourseSubjectEntity> subjectLst = new ArrayList<>();
+    @OneToMany(mappedBy = "subject", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<CourseSubjectEntity> courseLst = new ArrayList<>();
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @Builder.Default
+    @OneToMany(mappedBy = "subject", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<ClassroomSubjectEntity> classroomLst = new ArrayList<>();
 
     @Override
     public final boolean equals(Object o) {
@@ -60,7 +57,7 @@ public class CourseEntity extends Auditable {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        CourseEntity that = (CourseEntity) o;
+        SubjectEntity that = (SubjectEntity) o;
         return getId() != null && Objects.equals(getId(), that.getId());
     }
 

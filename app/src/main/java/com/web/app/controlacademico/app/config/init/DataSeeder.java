@@ -22,16 +22,16 @@ public class DataSeeder implements CommandLineRunner {
     public void run(String... args) {
 
         List<CourseEntity> courseEntityLst = List.of(
-                new CourseEntity("Fundamentos de Redes y Comunicaciones"),
-                new CourseEntity("Introducción a la Ciberseguridad"),
-                new CourseEntity("Programación Orientada a Objetos con Java"),
-                new CourseEntity("Desarrollo Web Full Stack con Spring Boot y Angular"),
-                new CourseEntity("Administración de Bases de Datos con PostgreSQL y MySQL"),
-                new CourseEntity("DevOps y Automatización con Docker y Jenkins"),
-                new CourseEntity("Arquitectura de Microservicios con Spring Cloud"),
-                new CourseEntity("Inteligencia Artificial y Machine Learning con Python"),
-                new CourseEntity("Gestión de Proyectos de TI con Metodologías Ágiles (Scrum y Kanban)"),
-                new CourseEntity("Análisis de Datos y Visualización con Power BI")
+                CourseEntity.builder().id(1L).code("C1").name("Fundamentos de Redes y Comunicaciones").build(),
+                CourseEntity.builder().id(2L).code("C2").name("Introducción a la Ciberseguridad").build(),
+                CourseEntity.builder().id(3L).code("C3").name("Programación Orientada a Objetos con Java").build(),
+                CourseEntity.builder().id(4L).code("C4").name("Desarrollo Web Full Stack con Spring Boot y Angular").build(),
+                CourseEntity.builder().id(5L).code("C5").name("Administración de Bases de Datos con PostgreSQL y MySQL").build(),
+                CourseEntity.builder().id(6L).code("C6").name("DevOps y Automatización con Docker y Jenkins").build(),
+                CourseEntity.builder().id(7L).code("C7").name("Arquitectura de Microservicios con Spring Cloud").build(),
+                CourseEntity.builder().id(8L).code("C8").name("Inteligencia Artificial y Machine Learning con Python").build(),
+                CourseEntity.builder().id(9L).code("C9").name("Gestión de Proyectos de TI con Metodologías Ágiles (Scrum y Kanban)").build(),
+                CourseEntity.builder().id(10L).code("C10").name("Análisis de Datos y Visualización con Power BI").build()
         );
 
         //courseRepository.saveAll(courseEntityLst);

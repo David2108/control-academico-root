@@ -10,6 +10,6 @@ import java.util.List;
 public class CourseResumeResponse {
     private String code;
     private String name;
-    private String instructorName;
+    private String period;
     private List<ClassroomResumeResponse> classroomLst;
 }

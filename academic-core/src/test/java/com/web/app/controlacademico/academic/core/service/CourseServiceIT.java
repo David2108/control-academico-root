@@ -2,6 +2,7 @@ package com.web.app.controlacademico.academic.core.service;
 
 import com.web.app.controlacademico.academic.core.dto.CourseRequest;
 import com.web.app.controlacademico.academic.core.dto.CourseResumeResponse;
+import com.web.app.controlacademico.academic.core.entity.CourseEntity;
 import com.web.app.controlacademico.academic.core.repository.ICourseRepository;
 import com.web.app.controlacademico.app.ControlAcademicoApplication;
 import jakarta.transaction.Transactional;
@@ -26,9 +27,12 @@ public class CourseServiceIT {
 
     @Test
     void shouldCreateCourseAndFindIt(){
-        CourseRequest request = new CourseRequest("BIO101", "Biologia Basica");
+        CourseRequest request = CourseRequest.builder()
+                .code("BIO101")
+                .name("Biologia Basica")
+                .build();
 
-        CourseResumeResponse response = courseService.save(request);
+        CourseEntity response = courseService.save(request);
 
         assertNotNull(response);
         assertEquals(request.getName(), response.getName());

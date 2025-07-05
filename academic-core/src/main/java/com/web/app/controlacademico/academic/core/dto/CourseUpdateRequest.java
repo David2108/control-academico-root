@@ -1,5 +1,6 @@
 package com.web.app.controlacademico.academic.core.dto;
 
+import com.web.app.controlacademico.academic.core.enums.StatusCourseEnum;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CourseRequest implements Serializable {
+public class CourseUpdateRequest implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -26,5 +27,14 @@ public class CourseRequest implements Serializable {
     @Size(min = 3, max = 100, message = "El nombre del curso debe tener entre 3 y 100 caracteres")
     @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúñÑüÜ0-9\\s\\-\\.]{3,100}$", message = "El nombre contiene caracteres inválidos")
     private String name;
-    private Long classroomId;
+
+    @NotEmpty
+    private String period;
+
+    @NotNull
+    private StatusCourseEnum status;
+
+    @NotNull(message = "El campo 'seats' es requerido")
+    @Min(value = 5)
+    private Integer seats;
 }
