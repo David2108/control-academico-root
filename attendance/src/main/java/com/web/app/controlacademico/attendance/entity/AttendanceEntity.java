@@ -26,9 +26,8 @@ public class AttendanceEntity extends Auditable {
     @Column(name = "student_id")
     private Long studentId;
 
-    @ManyToOne
-    @JoinColumn(name = "classroom_id", insertable = false, updatable = false)
-    private ClassroomEntity classroomEntity;
+    @Column(name = "classroom_id")
+    private Long classroomId;
 
     @Override
     public final boolean equals(Object o) {

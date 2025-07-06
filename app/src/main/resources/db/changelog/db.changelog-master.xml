@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+    <include file="db/changelog/changesets/module/academic-core/classroom/init-classroom.xml"/>
+    <include file="db/changelog/changesets/module/academic-core/course/init-course.xml"/>
+    <include file="/db/changelog/changesets/module/academic-core/subject/init-subject.xml"/>
+    <include
+            file="/db/changelog/changesets/module/academic-core/course-classroom-schedule/init-course-classroom-schedule.xml"/>
+    <include file="/db/changelog/changesets/module/academic-core/classroom-subject/init-classroom-subject.xml"/>
+    <include file="/db/changelog/changesets/module/academic-core/course-subject/init-course-subject.xml"/>
+
+    <include file="/db/changelog/changesets/module/admission/init-admissions.xml"/>
+    <include file="/db/changelog/changesets/module/attendance/init-attendances.xml"/>
+    <include file="/db/changelog/changesets/module/instructor/init-instructors.xml"/>
+    <include file="/db/changelog/changesets/module/student/init-students.xml"/>
+
+    <include file="/db/changelog/changesets/shared/add_audit_fields.xml"/>
+</databaseChangeLog>

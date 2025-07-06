@@ -1,20 +1,42 @@
 server:
   port: 8080
+
 # Configuration Spring
 spring:
+
   # Configuration profile
   profiles:
     active: dev
+
   # Configuration application
   application:
     name: control-academico
+
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
+
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+
 # Configuration Logging
 logging:
   level:
     org:
       hibernate:
         SQL: DEBUG
+
+# Configuration Endpoint Health
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
