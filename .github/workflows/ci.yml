@@ -22,6 +22,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
     services:
       db:
         image: mysql:8.0
@@ -71,12 +74,28 @@ jobs:
         name: Tag release version
         id: tag_version
         run: |
-          VERSION=$(./gradlew -q printVersion | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+(-[0-9]+-SNAPSHOT)?' | head -n 1)
+          VERSION=$(./gradlew -q printVersion | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
           if [ -z "$VERSION" ]; then
             echo "ERROR: No se pudo obtener la versión del proyecto"
             exit 1
           fi
           echo "Tagging release v$VERSION"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag v$VERSION
+          git push origin v$VERSION
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - if: startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/feat/')
+        name: Tag snapshot version
+        id: tag_snapshot_version
+        run: |
+          VERSION=$(./gradlew -q printVersion | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+-[0-9]+-SNAPSHOT' | head -n 1)
+          if [ -z "$VERSION" ]; then
+            echo "ERROR: No se pudo obtener la versión snapshot"
+            exit 1
+          fi
+          echo "Tagging snapshot v$VERSION"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git tag v$VERSION
@@ -124,10 +143,22 @@ jobs:
       - name: Reporte de cobertura (Jacoco)
         run: ./gradlew :academic-core:jacocoTestReport :app:jacocoTestReport
 
+      - name: Get version
+        id: version
+        run: |
+          if [[ "${GITHUB_REF}" == "refs/heads/master" ]]; then
+            VERSION=$(./gradlew -q printVersion | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
+          else
+            VERSION=$(./gradlew -q printVersion | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+-[0-9]+-SNAPSHOT' | head -n 1)
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
       - if: github.ref == 'refs/heads/master'
         name: Publish to Github Relases
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ steps.tag_version.outputs.VERSION }}
+          tag_name: v${{ needs.build.outputs.VERSION }}
+          name: Release v${{ needs.build.outputs.VERSION }}
           files: app/build/libs/*.jar
+          generate_release_notes: true
           fail_on_unmatched_files: false
