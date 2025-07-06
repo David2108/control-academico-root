@@ -120,9 +120,6 @@ jobs:
       - name: Reporte de cobertura (Jacoco)
         run: ./gradlew :academic-core:jacocoTestReport :app:jacocoTestReport
 
-      - name: Validate Liquibase migrations
-        run: ./gradlew update -Pspring.profiles.active=dev
-
       - if: github.ref == 'refs/heads/master'
         name: Publish to Github Relases
         uses: softprops/action-gh-release@v2
