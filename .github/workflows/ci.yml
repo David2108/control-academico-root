@@ -71,7 +71,11 @@ jobs:
         name: Tag release version
         id: tag_version
         run: |
-          VERSION=$(./gradlew -q printVersion | tail -n 1)
+          VERSION=$(./gradlew -q printVersion | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+(-[0-9]+-SNAPSHOT)?' | head -n 1)
+          if [ -z "$VERSION" ]; then
+            echo "ERROR: No se pudo obtener la versión del proyecto"
+            exit 1
+          fi
           echo "Tagging release v$VERSION"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
