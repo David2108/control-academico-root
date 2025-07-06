@@ -3,13 +3,30 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.*
 
-val mapstructVersion = "1.5.5.Final"
-val querydslVersion = "5.0.0"
 val lombokVersion = "1.18.30"
+val mapstructVersion = "1.5.5.Final"
+
+val versionMajor = 1
+val versionMinor = 0
+val versionPatch = 0
+
+// Lee número de build de Github Actions (o usar SNAPSHOT localmente)
+val buildNumber = System.getenv("GITHUB_RUN_NUMBER")
+// Detectar rama para decidir versión
+val gitRef = System.getenv("GITHUB_REF") ?: "local"
+val isRelease = gitRef.contains("refs/heads/master") || gitRef.contains("refs/heads/release/")
+
+version = if (isRelease) {
+    "$versionMajor.$versionMinor.$versionPatch"
+}else {
+    "$versionMajor.$versionMinor.$versionPatch-$buildNumber-SNAPSHOT"
+}
+
+println("Building version $version")
 
 plugins {
-    id("io.spring.dependency-management") version "1.1.7" apply false
     id("org.springframework.boot") version "3.5.0" apply false
+    id("io.spring.dependency-management") version "1.1.7" apply false
     kotlin("jvm") version "1.9.0" apply false
 }
 
@@ -20,9 +37,16 @@ allprojects {
     repositories {
         mavenCentral()
     }
+
+    // Configurar para que todos los modulos puedan usar junit5
+    tasks.withType<Test> {
+        useJUnitPlatform()
+    }
 }
 
 subprojects {
+
+    //Declara la version
     apply(plugin = "java")
     apply(plugin = "io.spring.dependency-management")
 
@@ -47,21 +71,34 @@ subprojects {
 
     dependencies {
 
-        //Lombok
+        // Lombok
         "compileOnly"("org.projectlombok:lombok:$lombokVersion")
         "annotationProcessor"("org.projectlombok:lombok:$lombokVersion")
 
-        "testImplementation"("org.springframework.boot:spring-boot-starter-test")
-        "annotationProcessor"("org.springframework.boot:spring-boot-configuration-processor")
-    }
+        // Mapper
+        "implementation"("org.mapstruct:mapstruct:$mapstructVersion")
+        "annotationProcessor"("org.mapstruct:mapstruct-processor:$mapstructVersion")
 
-    // Configurar tests
-    tasks.withType<Test> {
-        useJUnitPlatform()
+        // QueryDSL
+        "implementation"("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+        "annotationProcessor"("com.querydsl:querydsl-apt:5.0.0:jakarta")
+        "annotationProcessor"("jakarta.annotation:jakarta.annotation-api")
+        "annotationProcessor"("jakarta.persistence:jakarta.persistence-api")
     }
 
     // Incluir carpeta de código generado para MapStruct y QueryDSL
     the<SourceSetContainer>().named("main") {
         java.srcDir("build/generated/sources/annotationProcessor/java/main")
+    }
+}
+
+tasks.withType<Jar> {
+    archiveBaseName.set("control-academico")
+    archiveVersion.set("$version")
+}
+
+tasks.register("printVersion"){
+    doLast {
+        println(project.version)
     }
 }

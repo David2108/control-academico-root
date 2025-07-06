@@ -6,3 +6,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+
+  liquibase:
+    contexts: prod
+    parameters:
+      datetime_type: TIMESTAMP WITHOUT TIME ZONE

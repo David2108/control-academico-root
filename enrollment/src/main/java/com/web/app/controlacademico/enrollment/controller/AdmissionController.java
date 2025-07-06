@@ -1,7 +1,5 @@
 package com.web.app.controlacademico.enrollment.controller;
 
-import com.web.app.controlacademico.attendance.dto.AttendanceRequest;
-import com.web.app.controlacademico.attendance.service.AttendanceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
@@ -15,7 +13,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class AdmissionController {
 
-    private final AttendanceService attendanceService;
+    //private final AttendanceService attendanceService;
 
     @GetMapping("/student/{id}")
     public ResponseEntity<?> getHistorialByStudentId(Long id){
@@ -27,14 +25,14 @@ public class AdmissionController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateAttendanceStatus(@Valid @RequestBody AttendanceRequest attendanceRequest, Long id){
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping()
-    public void createAttendance(@Valid @RequestBody AttendanceRequest attendanceRequest){
-        attendanceService.registerAttendance(attendanceRequest);
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<?> updateAttendanceStatus(@Valid @RequestBody AttendanceRequest attendanceRequest, Long id){
+//        return ResponseEntity.ok().build();
+//    }
+//
+//    @PostMapping()
+//    public void createAttendance(@Valid @RequestBody AttendanceRequest attendanceRequest){
+//        attendanceService.registerAttendance(attendanceRequest);
+//    }
 
 }

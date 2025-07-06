@@ -1,5 +1,12 @@
 plugins {
-    id("org.springframework.boot")
+    id("java")
+    id("jacoco")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.boot:spring-boot-dependencies:3.2.0")
+    }
 }
 
 dependencies {
@@ -7,21 +14,52 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
+    // Validations
+    //implementation("jakarta.validation:jakarta.validation-api:3.0.2")
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
-    implementation("org.mapstruct:mapstruct:1.5.5.Final")
-    annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
+    // Utility
+    implementation("org.apache.commons:commons-collections4:4.4")
 
-    implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
-    annotationProcessor("com.querydsl:querydsl-apt:5.0.0:jakarta")
-    annotationProcessor("jakarta.annotation:jakarta.annotation-api")
-    annotationProcessor("jakarta.persistence:jakarta.persistence-api")
-
+    // Database
     runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("com.h2database:h2")
     runtimeOnly("com.mysql:mysql-connector-j")
     implementation("com.ibm.db2:jcc:11.5.8.0")
 
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    // Testing
+    // Tes unit
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.mockito:mockito-junit-jupiter")
+    // Test integration
+    testImplementation(project(":app"))
+    testImplementation("com.h2database:h2")
+    // Data Testing
+    testImplementation("org.jeasy:easy-random-core:5.0.0")
+    testImplementation("net.datafaker:datafaker:2.0.2")
 
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+
+tasks.getByName<Jar>("jar") {
+    enabled = true
+}
+
+// Configuración global de Jacoco para el módulo
+jacoco {
+    toolVersion = "0.8.11" // o la última versión estable
+}
+
+// Configura el reporte del task jacocoTestReport
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // Que siempre corra después de los tests
+    reports {
+        xml.required.set(true)  // ¡IMPORTANTE! Así Codecov/Sonar puede analizarlo
+        html.required.set(false)
+        csv.required.set(false)
+    }
 }

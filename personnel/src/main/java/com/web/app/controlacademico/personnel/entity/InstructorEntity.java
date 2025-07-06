@@ -2,6 +2,8 @@ package com.web.app.controlacademico.personnel.entity;
 
 import com.web.app.controlacademico.shared.core.Auditable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -16,9 +18,13 @@ public class InstructorEntity extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
+    @Column(unique = true)
+    private String dni;
+
     private String name;
 
-    public InstructorEntity(String name) {
-        this.name = name;
-    }
+    @Email
+    private String email;
+
 }

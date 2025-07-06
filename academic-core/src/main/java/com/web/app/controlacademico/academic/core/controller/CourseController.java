@@ -1,8 +1,11 @@
 package com.web.app.controlacademico.academic.core.controller;
 
-import com.web.app.controlacademico.course.dto.CourseRequest;
-import com.web.app.controlacademico.course.dto.CourseResponse;
-import com.web.app.controlacademico.course.service.ICourseService;
+import com.web.app.controlacademico.academic.core.dto.CourseRequest;
+import com.web.app.controlacademico.academic.core.dto.CourseResumeResponse;
+import com.web.app.controlacademico.academic.core.dto.CourseUpdateRequest;
+import com.web.app.controlacademico.academic.core.entity.CourseEntity;
+import com.web.app.controlacademico.academic.core.mapper.ICourseMapper;
+import com.web.app.controlacademico.academic.core.service.ICourseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,35 +13,45 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/course")
+@RequestMapping("/api/courses")
 @RequiredArgsConstructor
 public class CourseController {
 
     private final ICourseService courseService;
+    private final ICourseMapper courseMapper;
 
-    @GetMapping()
-    public ResponseEntity<List<CourseResponse>> getAll(){
+    @GetMapping
+    public ResponseEntity<List<CourseResumeResponse>> getAll(){
         return ResponseEntity.ok(courseService.getList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable Long id){
-        return ResponseEntity.ok().build();
+    public ResponseEntity<CourseResumeResponse> getById(@PathVariable("id") Long id){
+        return ResponseEntity.ok()
+                .body(courseMapper.toDtoResponse(this.courseService.getById(id)));
     }
 
-    @PostMapping()
-    public ResponseEntity<CourseResponse> create(@Valid @RequestBody CourseRequest request){
-        return Optional.ofNullable(courseService.save(request))
-                .map(response -> ResponseEntity.status(HttpStatus.CREATED).body(response))
-                .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+    @PostMapping
+    public ResponseEntity<CourseResumeResponse> create(@Valid @RequestBody CourseRequest request){
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(courseMapper.toDtoResponse(this.courseService.save(request)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@Valid @RequestBody CourseRequest request, Long id){
-        return ResponseEntity.ok().build();
+    public ResponseEntity<CourseResumeResponse> update(@Valid @RequestBody CourseUpdateRequest request, @PathVariable("id") Long id){
+        return ResponseEntity.ok()
+                .body(courseMapper.toDtoResponse(this.courseService.update(request, id)));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id){
+        this.courseService.deleteById(id);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
 }

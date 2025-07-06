@@ -4,6 +4,13 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: dev
     password: dev
+
+  # Configuration Liquibase
+  liquibase:
+    contexts: dev
+    parameters:
+      datetime_type: DATETIME
+
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate

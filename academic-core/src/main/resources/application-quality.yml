@@ -1,9 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:db2://localhost:50000/control
-    driver-class-name: com.ibm.db2.jcc.DB2Driver
-    username: dev
-    password: dev
-  jpa:
-    hibernate:
-      ddl-auto: validate
