@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.31.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1751825105351-1" author="david" dbms="mysql">
+        <createTable tableName="course_subject">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_course_subject"/>
+            </column>
+            <column name="course_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="subject_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1751825105351-2" author="david" dbms="mysql">
+        <addUniqueConstraint columnNames="course_id, subject_id" constraintName="uc_96fcc55dfcb39e3056d8565fb"
+                             tableName="course_subject"/>
+    </changeSet>
+    <changeSet id="1751825105351-3" author="david" dbms="mysql">
+        <addForeignKeyConstraint baseColumnNames="course_id" baseTableName="course_subject"
+                                 constraintName="FK_COURSE_SUBJECT_ON_COURSE" referencedColumnNames="id"
+                                 referencedTableName="courses"/>
+    </changeSet>
+    <changeSet id="1751825105351-4" author="david" dbms="mysql">
+        <addForeignKeyConstraint baseColumnNames="subject_id" baseTableName="course_subject"
+                                 constraintName="FK_COURSE_SUBJECT_ON_SUBJECT" referencedColumnNames="id"
+                                 referencedTableName="subjects"/>
+    </changeSet>
+
+</databaseChangeLog>

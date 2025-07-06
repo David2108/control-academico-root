@@ -7,8 +7,6 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -18,7 +16,7 @@ import java.util.Objects;
 @Builder
 @ToString
 @Entity
-@Table(name = "subject")
+@Table(name = "subjects")
 public class SubjectEntity extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,18 +35,6 @@ public class SubjectEntity extends Auditable {
     private Integer credits;
 
     private String description;
-
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @Builder.Default
-    @OneToMany(mappedBy = "subject", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<CourseSubjectEntity> courseLst = new ArrayList<>();
-
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @Builder.Default
-    @OneToMany(mappedBy = "subject", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<ClassroomSubjectEntity> classroomLst = new ArrayList<>();
 
     @Override
     public final boolean equals(Object o) {

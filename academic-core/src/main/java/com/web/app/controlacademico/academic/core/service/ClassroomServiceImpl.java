@@ -78,6 +78,9 @@ public class ClassroomServiceImpl implements IClassroomService {
         if(Objects.isNull(id) || id.compareTo(0L) <= 0) {
             throw new IllegalArgumentException("El id de la aula no puede ser null o cero");
         }
+        if(!repository.existsById(id)) {
+            throw new NotFoundException("No se encontro la aula con el id:" + id + " en la base de datos al momento de eliminarla");
+        }
         repository.deleteById(id);
     }
 

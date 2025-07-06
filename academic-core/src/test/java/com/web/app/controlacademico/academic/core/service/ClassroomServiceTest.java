@@ -160,8 +160,8 @@ public class ClassroomServiceTest {
     @Test
     void shouldGetClassroomList(){
         List<ClassroomEntity> classroomList = List.of(
-                new ClassroomEntity(1L, "BIO101", "Aula 101", 50, "Edificion A", TypeClassroomEnum.PHYSICAL, StatusClassroomEnum.AVAILABLE, List.of(), List.of()),
-                new ClassroomEntity(2L, "BIO102", "Aula 102", 50, "Edificion A", TypeClassroomEnum.VIRTUAL, StatusClassroomEnum.AVAILABLE, List.of(), List.of())
+                new ClassroomEntity(1L, "BIO101", "Aula 101", 50, "Edificion A", TypeClassroomEnum.PHYSICAL, StatusClassroomEnum.AVAILABLE),
+                new ClassroomEntity(2L, "BIO102", "Aula 102", 50, "Edificion A", TypeClassroomEnum.VIRTUAL, StatusClassroomEnum.AVAILABLE)
         );
         when(classroomRepository.findAll()).thenReturn(classroomList);
         List<ClassroomResumeResponse> response = classroomService.findAll();

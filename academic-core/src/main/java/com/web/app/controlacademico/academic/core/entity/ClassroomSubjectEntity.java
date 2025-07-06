@@ -1,5 +1,6 @@
 package com.web.app.controlacademico.academic.core.entity;
 
+import com.web.app.controlacademico.shared.core.Auditable;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +12,7 @@ import lombok.*;
 @Entity
 @Table(name = "classroom_subject",
 uniqueConstraints = @UniqueConstraint(columnNames = {"classroom_id", "subject_id"}))
-public class ClassroomSubjectEntity {
+public class ClassroomSubjectEntity extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -200,4 +200,83 @@ class ClassroomControllerIT {
 
     }
 
+    @Test
+    void shouldCreateClassroomWhenFieldsAreNull() throws Exception {
+
+        String request = """
+                {
+                    "code":"",
+                    "name":null,
+                    "capacity":50,
+                    "location":"Edificion A",
+                    "type":"PHYSICAL"
+                }
+                """;
+
+        mockMvc.perform(post("/api/classrooms")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").exists());
+
+    }
+
+    @Test
+    void shouldUpdateClassroomWhenFieldsAreNull() throws Exception {
+
+        String request = """
+                {
+                    "code":"",
+                    "name":null,
+                    "capacity":10,
+                    "location":"Edificion A",
+                    "type":"PHYSICAL"
+                }
+                """;
+
+        mockMvc.perform(put("/api/classrooms/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").exists());
+
+    }
+
+    @Test
+    void shouldUpdateClassroomWhenCourseNotExists() throws Exception {
+
+        String request = """
+                {
+                    "code":"BIO101",
+                    "name":"Aula 101",
+                    "capacity":10,
+                    "location":"Edificion A",
+                    "type":"PHYSICAL"
+                }
+                """;
+
+        mockMvc.perform(put("/api/classrooms/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                .andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    void shouldDeleteClassroomByIdWhenClassroomNotExists() throws Exception {
+
+        mockMvc.perform(delete("/api/classrooms/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    void shouldGetClassroomByIdWhenClassroomNotExists() throws Exception {
+
+        mockMvc.perform(get("/api/classrooms/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+    }
 }

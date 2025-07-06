@@ -39,6 +39,7 @@ public class CourseClassroomScheduleServiceImpl implements ICourseClassroomSched
     public void addClassroomsToCourse(@NotNull CourseEntity course,
                                       @NotEmpty List<ClassroomEntity> classroom) {
         List<CourseClassroomScheduleEntity> entityLst = classroom.stream()
+                .filter(classroomData -> !repository.existsByCourseIdAndClassroomId(course.getId(), classroomData.getId()))
                 .map(classroomData -> CourseClassroomScheduleEntity.builder()
                         .course(course)
                         .classroom(classroomData)

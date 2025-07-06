@@ -70,6 +70,9 @@ public class SubjectServiceImpl implements ISubjectService {
     @Validated
     @Override
     public void deleteById(@NotNull @Positive Long id) {
+        if (!repository.existsById(id)) {
+            throw new NotFoundException("No se encontró la materia con el id:" + id + " en la base de datos al momento de eliminarla");
+        }
         repository.deleteById(id);
     }
 

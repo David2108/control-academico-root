@@ -41,18 +41,6 @@ public class CourseEntity extends Auditable {
 
     private Integer seats;
 
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @Builder.Default
-    @OneToMany(mappedBy = "course", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
-    List<CourseClassroomScheduleEntity> classroomLst = new ArrayList<>();
-
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @Builder.Default
-    @OneToMany(mappedBy = "course", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
-    List<CourseSubjectEntity> subjectLst = new ArrayList<>();
-
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

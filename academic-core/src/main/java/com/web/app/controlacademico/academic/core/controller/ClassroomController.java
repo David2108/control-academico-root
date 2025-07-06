@@ -37,7 +37,8 @@ public class ClassroomController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClassroomResumeResponse> update(@PathVariable("id") Long id, @RequestBody ClassroomRequest request) {
+    public ResponseEntity<ClassroomResumeResponse> update(@PathVariable("id") Long id,
+                                                          @Valid @RequestBody ClassroomRequest request) {
         return ResponseEntity.ok(mapper.toDtoResponse(service.update(request, id)));
     }
 

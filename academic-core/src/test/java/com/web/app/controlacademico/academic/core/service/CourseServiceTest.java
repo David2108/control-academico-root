@@ -85,7 +85,7 @@ public class CourseServiceTest {
                         .name("Curso 1")
                         .build());
 
-        CourseResumeResponse response = courseService.getById(id);
+        CourseEntity response = courseService.getById(id);
 
         assertNotNull(response);
         assertNotNull(response.getName());

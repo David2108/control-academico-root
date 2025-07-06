@@ -52,18 +52,6 @@ public class ClassroomEntity extends Auditable {
     @Enumerated(EnumType.STRING)
     private StatusClassroomEnum status;
 
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @Builder.Default
-    @OneToMany(mappedBy = "classroom", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE},orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<CourseClassroomScheduleEntity> courseLst = new ArrayList<>();
-
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @Builder.Default
-    @OneToMany(mappedBy = "classroom", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<ClassroomSubjectEntity> subjectLst = new ArrayList<>();
-
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

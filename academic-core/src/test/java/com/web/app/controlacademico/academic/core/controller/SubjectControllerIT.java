@@ -188,4 +188,76 @@ public class SubjectControllerIT {
 
     }
 
+    @Test
+    void shouldCreateCoursesWhenFieldsAreNull() throws Exception {
+
+        String request = """
+                {
+                    "code":"",
+                    "name":null,
+                    "credits":5
+                }
+                """;
+
+        mockMvc.perform(post("/api/subjects")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    void shouldUpdateCourseWhenFieldsAreNull() throws Exception {
+
+        String request = """
+                {
+                    "code":"",
+                    "name":null,
+                    "credits":5
+                }
+                """;
+
+        mockMvc.perform(put("/api/subjects/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    void shouldUpdateCourseWhenSubjectDoesNotExist() throws Exception {
+
+        String request = """
+                {
+                    "code":"BIO101",
+                    "name":"Aula 101",
+                    "credits":5
+                }
+                """;
+
+        mockMvc.perform(put("/api/subjects/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                .andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    void shouldDeleteCourseByIdWhenSubjectNotExists() throws Exception {
+
+        mockMvc.perform(delete("/api/subjects/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    void shouldGetCourseByIdWhenSubjectNotExists() throws Exception {
+
+        mockMvc.perform(get("/api/subjects/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+    }
+
 }

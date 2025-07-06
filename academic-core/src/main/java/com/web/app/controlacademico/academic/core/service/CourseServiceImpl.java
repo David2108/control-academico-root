@@ -84,6 +84,9 @@ public class CourseServiceImpl implements ICourseService {
     @Validated
     @Override
     public void deleteById(@NotNull @Positive Long id) {
+        if (!this.courseRepository.existsById(id)) {
+            throw new NotFoundException("No se encontró el curso con el id:" + id + " en la base de datos al momento de eliminarlo");
+        }
         this.courseRepository.deleteById(id);
     }
 

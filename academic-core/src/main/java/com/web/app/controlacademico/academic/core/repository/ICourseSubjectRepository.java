@@ -8,4 +8,5 @@ import java.util.List;
 public interface ICourseSubjectRepository extends JpaRepository<CourseSubjectEntity, Long> {
     List<CourseSubjectEntity> findByCourseId(Long courseId);
     void deleteByCourseIdAndSubjectId(Long courseId, Long subjectId);
+    boolean existsByCourseIdAndSubjectId(Long id, Long id1);
 }

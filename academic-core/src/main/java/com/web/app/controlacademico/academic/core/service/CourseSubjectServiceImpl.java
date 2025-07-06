@@ -70,6 +70,7 @@ public class CourseSubjectServiceImpl implements ICourseSubjectService {
     public void addSubjectsToCourse(@NotNull CourseEntity newCourse,
                                     @NotEmpty List<SubjectEntity> subjectLst) {
         List<CourseSubjectEntity> entityLst = subjectLst.stream()
+                .filter(subjectData -> !repository.existsByCourseIdAndSubjectId(newCourse.getId(), subjectData.getId()))
                 .map(subjectData -> CourseSubjectEntity.builder()
                         .course(newCourse)
                         .subject(subjectData)

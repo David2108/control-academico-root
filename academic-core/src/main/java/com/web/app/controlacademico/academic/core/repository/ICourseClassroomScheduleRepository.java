@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ICourseClassroomScheduleRepository extends JpaRepository<CourseClassroomScheduleEntity, Long> {
     void deleteByCourseIdAndClassroomId(Long courseId, Long classroomId);
+    boolean existsByCourseIdAndClassroomId(Long id, Long id1);
 }

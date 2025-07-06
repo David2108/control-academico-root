@@ -1,5 +1,6 @@
 package com.web.app.controlacademico.academic.core.controller;
 
+import com.web.app.controlacademico.academic.core.dto.CourseUpdateRequest;
 import com.web.app.controlacademico.academic.core.entity.CourseEntity;
 import com.web.app.controlacademico.academic.core.enums.StatusCourseEnum;
 import com.web.app.controlacademico.academic.core.repository.ICourseRepository;
@@ -47,8 +48,6 @@ public class CourseControllerIT {
                 .code("BIO101")
                 .name("Aula 101")
                 .status(StatusCourseEnum.ACTIVE)
-                .classroomLst(new ArrayList<>())
-                .subjectLst(new ArrayList<>())
                 .build();
 
         repository.save(entity);
@@ -175,8 +174,6 @@ public class CourseControllerIT {
                 .code("BIO101")
                 .name("Aula 101")
                 .status(StatusCourseEnum.ACTIVE)
-                .classroomLst(new ArrayList<>())
-                .subjectLst(new ArrayList<>())
                 .build();
 
         CourseEntity response = repository.save(entity);
@@ -186,6 +183,86 @@ public class CourseControllerIT {
                 .andExpect(status().isNoContent());
 
         assertFalse(repository.existsById(response.getId()));
+
+    }
+
+    @Test
+    void shouldValidateFieldNullWhenCreate() throws Exception {
+
+        String request = """
+                {
+                    "code":"",
+                    "name":null,
+                    "period":"",
+                    "status":"ACTIVE",
+                    "seats":-5
+                }
+                """;
+
+            mockMvc.perform(post("/api/courses")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(request))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.message").exists());
+
+    }
+
+    @Test
+    void shouldValidateFieldNullWhenUpdate() throws Exception {
+
+        String request = """
+                {
+                    "code":"",
+                    "name":null,
+                    "period":"",
+                    "status":"ACTIVE",
+                    "seats":-5
+                }
+                """;
+
+        mockMvc.perform(put("/api/courses/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").exists());
+
+    }
+
+    @Test
+    void shouldValidateCourseNotExistsWhenUpdate() throws Exception {
+
+        String request = """
+                {
+                    "code":"MAT101",
+                    "name":"Aula 101",
+                    "period":"2025-2026",
+                    "status":"ACTIVE",
+                    "seats":50
+                }
+                """;
+
+        mockMvc.perform(put("/api/courses/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                .andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    void shouldDeleteCourseByIdWhenCourseNotExists() throws Exception {
+
+        mockMvc.perform(delete("/api/courses/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    void shouldGetCourseByIdWhenCourseNotExists() throws Exception {
+
+        mockMvc.perform(get("/api/courses/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
 
     }
 

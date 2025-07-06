@@ -8,6 +8,7 @@ import com.web.app.controlacademico.academic.core.mapper.IClassroomMapper;
 import com.web.app.controlacademico.academic.core.mapper.ICourseMapper;
 import com.web.app.controlacademico.academic.core.mapper.ISubjectMapper;
 import com.web.app.controlacademico.shared.exception.BusinessRuleException;
+import com.web.app.controlacademico.shared.exception.InvalidIdException;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
@@ -34,7 +35,7 @@ public class CourseManagementServiceImpl implements ICourseManagementService {
     @Override
     public CourseManagementResponse createCourseByClassroomExist(CourseRequest request) {
         if (Objects.isNull(request.getClassroomId())) {
-            throw new BusinessRuleException("Se debe enviar el id de la aula");
+            throw new InvalidIdException("Se debe enviar el id de la aula");
         }
         ClassroomEntity classroom = classroomService.getById(request.getClassroomId());
         CourseEntity newCourse = courseService.save(request);

@@ -29,7 +29,7 @@ public class CourseManagementController {
     }
 
     @PostMapping("/full")
-    public ResponseEntity<CourseResumeResponse> createFull(@Valid @RequestBody CourseManagementRequest request) {
+    public ResponseEntity<CourseManagementResponse> createFull(@Valid @RequestBody CourseManagementRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(courseManagementService.createCourseFull(request));
     }
 
