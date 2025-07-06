@@ -92,7 +92,6 @@ public class ClassroomServiceTest {
                 .build();
 
         when(classroomMapper.toEntity(request)).thenReturn(entity);
-        when(classroomMapper.toDtoResponse(entity)).thenReturn(responseService);
         when(classroomRepository.save(any(ClassroomEntity.class))).thenReturn(entity);
 
         ClassroomEntity response = classroomService.save(request);
@@ -208,6 +207,7 @@ public class ClassroomServiceTest {
 
         Long id = 1L;
 
+        when(classroomRepository.existsById(id)).thenReturn(true);
         assertDoesNotThrow(() -> classroomService.deleteById(id));
 
         verify(classroomRepository, times(1)).deleteById(id);

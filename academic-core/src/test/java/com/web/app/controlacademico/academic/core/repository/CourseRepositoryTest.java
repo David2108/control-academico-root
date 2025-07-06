@@ -1,6 +1,7 @@
 package com.web.app.controlacademico.academic.core.repository;
 
 import com.web.app.controlacademico.academic.core.entity.CourseEntity;
+import com.web.app.controlacademico.academic.core.enums.StatusCourseEnum;
 import com.web.app.controlacademico.app.ControlAcademicoApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ public class CourseRepositoryTest {
         CourseEntity courseEntity = new CourseEntity();
         courseEntity.setCode("MATH101");
         courseEntity.setName("Matematicas Basicas");
+        courseEntity.setStatus(StatusCourseEnum.ACTIVE);
 
         CourseEntity response = courseRepository.save(courseEntity);
 

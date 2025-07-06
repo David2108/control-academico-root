@@ -78,12 +78,10 @@ public class CourseServiceTest {
     void shouldGetDataWhenGetCourseByIdIfExistData(){
 
         Long id = 1L;
-        when(courseRepository.findById(id)).thenReturn(Optional.of(new CourseEntity()));
-        when(courseMapper.toDtoResponse(any(CourseEntity.class)))
-                .thenReturn(CourseResumeResponse.builder()
-                        .code("C1")
-                        .name("Curso 1")
-                        .build());
+        CourseEntity entity = new CourseEntity();
+        entity.setCode("C1");
+        entity.setName("Curso 1");
+        when(courseRepository.findById(id)).thenReturn(Optional.of(entity));
 
         CourseEntity response = courseService.getById(id);
 
