@@ -10,6 +10,7 @@ spring:
     contexts: dev
     parameters:
       datetime_type: DATETIME
+      liquibase.secureParsing: false
 
   jpa:
     hibernate:

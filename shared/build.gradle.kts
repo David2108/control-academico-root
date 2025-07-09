@@ -13,8 +13,7 @@ dependencies {
     implementation("org.springframework.data:spring-data-commons")
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework:spring-web")
-    implementation("org.springframework:spring-context")
+    compileOnly("org.springframework.boot:spring-boot-starter-web")
 
     // Validación (solo API)
     implementation("jakarta.validation:jakarta.validation-api:3.0.2")

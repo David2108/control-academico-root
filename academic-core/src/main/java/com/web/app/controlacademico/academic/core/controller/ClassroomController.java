@@ -4,6 +4,8 @@ import com.web.app.controlacademico.academic.core.dto.ClassroomRequest;
 import com.web.app.controlacademico.academic.core.dto.ClassroomResumeResponse;
 import com.web.app.controlacademico.academic.core.mapper.IClassroomMapper;
 import com.web.app.controlacademico.academic.core.service.IClassroomService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Classroom", description = "Endpoints de la entidad Classroom")
 @RestController
 @RequestMapping("/api/classrooms")
 @RequiredArgsConstructor
@@ -30,6 +33,10 @@ public class ClassroomController {
         return ResponseEntity.ok(mapper.toDtoResponse(service.getById(id)));
     }
 
+    @Operation(
+            summary = "Crear un curso (ESTABLE)",
+            description = "Crea un nuevo curso. Contrato estable."
+    )
     @PostMapping
     public ResponseEntity<ClassroomResumeResponse> create(@Valid @RequestBody ClassroomRequest request){
         ClassroomResumeResponse response = mapper.toDtoResponse(service.save(request));

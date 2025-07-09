@@ -20,7 +20,7 @@ dependencies {
     // Database
     runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("com.h2database:h2")
-    runtimeOnly("com.mysql:mysql-connector-j")
+    runtimeOnly("com.mysql:mysql-connector-j")n l
     implementation("com.ibm.db2:jcc:11.5.8.0")
 
     implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")

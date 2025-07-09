@@ -6,6 +6,7 @@ import com.web.app.controlacademico.academic.core.dto.CourseRequest;
 import com.web.app.controlacademico.academic.core.dto.CourseResumeResponse;
 import com.web.app.controlacademico.academic.core.service.CourseManagementServiceImpl;
 import com.web.app.controlacademico.academic.core.service.ICourseManagementService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,10 @@ public class CourseManagementController {
 
     private final ICourseManagementService courseManagementService;
 
+    @Operation(
+            summary = "Crear curso con aula (BORRADOR/EXPERIMENTAL)",
+            description = "Este endpoint está en fase experimental y sujeto a cambios. No usar en producción ni integrar desde frontend aún."
+    )
     @PostMapping
     public ResponseEntity<CourseManagementResponse> create(@Valid @RequestBody CourseRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
