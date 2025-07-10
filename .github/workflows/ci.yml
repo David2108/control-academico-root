@@ -58,6 +58,15 @@ jobs:
       - name: Da permisos a gradlew
         run: chmod +x ./gradlew
 
+      - name: Mostrar variables de entorno
+        run: env
+
+      - name: Versión de gradle
+        run: ./gradlew --version
+
+      - name: Versión de java
+        run: java -version
+
       - name: Build all modules
         run: ./gradlew clean build -x test
 
