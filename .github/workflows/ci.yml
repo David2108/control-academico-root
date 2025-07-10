@@ -70,9 +70,9 @@ jobs:
       - name: Comprobar secret TEST_SECRET
         run: |
           if [-z "${{TEST_SECRET}}"]; then
-            echo "No existe el secret TEST_SECRET"
+            echo "No existe el secret TEST_SECRET";
           else
-            echo "Existe el secret TEST_SECRET"
+            echo "Existe el secret TEST_SECRET";
           fi
 
       - name: Build all modules
