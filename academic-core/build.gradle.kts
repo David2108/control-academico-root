@@ -28,6 +28,9 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
     implementation("com.ibm.db2:jcc:11.5.8.0")
 
+    // Documentation
+    implementation("io.swagger.core.v3:swagger-annotations:2.2.20")
+
     // Testing
     // Tes unit
     testImplementation("org.springframework.boot:spring-boot-starter-test")

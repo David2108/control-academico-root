@@ -11,3 +11,10 @@ spring:
     contexts: prod
     parameters:
       datetime_type: TIMESTAMP WITHOUT TIME ZONE
+
+# Configuration SpringDoc - Desactiva documentación en el ambiente de producción
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
