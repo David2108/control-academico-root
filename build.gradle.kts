@@ -95,7 +95,29 @@ tasks.withType<Jar> {
 }
 
 tasks.register("printVersion"){
+    group = "build"
+    description = "Imprimir la versión del proyecto"
     doLast {
         println(project.version)
+    }
+}
+
+tasks.register("limpiar"){
+    group = "build"
+    description = "Limpiar los archivos generados"
+    doLast {
+        delete(layout.buildDirectory)
+    }
+}
+
+tasks.register("info"){
+    group = "build"
+    description = "Información básica del proyecto"
+    doLast {
+        val versionGradle = gradle.gradleVersion
+        val versionJava = System.getProperty("java.version")
+        println("Version Gradle: $versionGradle")
+        println("Version Java: $versionJava")
+        System.getenv().forEach { (key, value) -> println("$key: $value") }
     }
 }
